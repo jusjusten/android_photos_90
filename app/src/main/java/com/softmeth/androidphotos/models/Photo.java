@@ -1,4 +1,4 @@
-package com.softmeth.photosandroid.models;
+package com.softmeth.androidphotos.models;
 
 import android.net.Uri;
 import java.io.Serializable;

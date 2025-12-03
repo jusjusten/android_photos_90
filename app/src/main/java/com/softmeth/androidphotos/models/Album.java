@@ -1,4 +1,4 @@
-package com.softmeth.photosandroid.models;
+package com.softmeth.androidphotos.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
