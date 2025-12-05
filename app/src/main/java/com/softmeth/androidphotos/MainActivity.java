@@ -1,5 +1,6 @@
 package com.softmeth.androidphotos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -182,8 +183,9 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
     }
 
     private void openAlbum(Album album) {
-        // TODO: Navigate to album detail screen
-        Toast.makeText(this, "Opening " + album.getName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, AlbumDetailActivity.class);
+        intent.putExtra(AlbumDetailActivity.EXTRA_ALBUM_NAME, album.getName());
+        startActivity(intent);
     }
 
     @Override

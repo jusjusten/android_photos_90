@@ -80,13 +80,3 @@ public class Photo implements Serializable {
         return fileName;
     }
 }
-```
-
-Now you should have:
-```
-com.softmeth.photosandroid/
-├── MainActivity.java
-└── models/
-    ├── Album.java ✅
-    ├── Photo.java ✅
-    └── Tag.java ✅

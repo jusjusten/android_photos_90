@@ -20,6 +20,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AlbumDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".PhotoDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".AlbumDetailActivity"/>
     </application>
 
 </manifest>

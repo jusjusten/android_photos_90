@@ -94,6 +94,17 @@ public class AlbumActivity extends AppCompatActivity implements PhotoAdapter.OnP
         DataManager.saveAlbums(this, albums);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Reload albums in case tags were modified
+        albums = DataManager.loadAlbums(this);
+        if (albumPosition >= 0 && albumPosition < albums.size()) {
+            album = albums.get(albumPosition);
+            adapter.setPhotos(album.getPhotos());
+        }
+    }
+
     private void updateEmptyView() {
         if (album.getPhotos().isEmpty()) {
             recyclerView.setVisibility(View.GONE);
@@ -135,8 +146,14 @@ public class AlbumActivity extends AppCompatActivity implements PhotoAdapter.OnP
 
     @Override
     public void onPhotoClick(Photo photo, int position) {
-        // TODO: Open photo detail view
-        Toast.makeText(this, "Opening " + photo.getFileName(), Toast.LENGTH_SHORT).show();
+        openPhotoDetail(position);
+    }
+    
+    private void openPhotoDetail(int position) {
+        Intent intent = new Intent(this, PhotoDetailActivity.class);
+        intent.putExtra(AlbumDetailActivity.EXTRA_ALBUM_NAME, album.getName());
+        intent.putExtra(AlbumDetailActivity.EXTRA_PHOTO_POSITION, position);
+        startActivity(intent);
     }
 
     @Override
