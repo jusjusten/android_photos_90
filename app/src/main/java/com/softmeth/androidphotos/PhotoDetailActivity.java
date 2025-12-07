@@ -54,6 +54,9 @@ public class PhotoDetailActivity extends AppCompatActivity {
             return;
         }
 
+        // Set up toolbar
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(album.getName());
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

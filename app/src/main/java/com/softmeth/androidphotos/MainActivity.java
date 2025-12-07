@@ -3,6 +3,8 @@ package com.softmeth.androidphotos;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -55,10 +57,35 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Reload albums when returning to activity
+        albums = DataManager.loadAlbums(this);
+        adapter.setAlbums(albums);
+        updateEmptyView();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         // Save albums when app goes to background
         DataManager.saveAlbums(this, albums);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_search) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void updateEmptyView() {

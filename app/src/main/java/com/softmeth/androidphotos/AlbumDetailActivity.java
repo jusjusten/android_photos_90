@@ -59,6 +59,8 @@ public class AlbumDetailActivity extends AppCompatActivity implements PhotoAdapt
         }
 
         // Set up toolbar
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(album.getName());
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -148,11 +150,14 @@ public class AlbumDetailActivity extends AppCompatActivity implements PhotoAdapt
         }
 
         Photo photo = new Photo(uri, fileName);
-        album.addPhoto(photo);
-        adapter.notifyItemInserted(album.getPhotos().size() - 1);
-        updateEmptyView();
-        DataManager.saveAlbums(this, allAlbums);
-        Toast.makeText(this, "Photo added", Toast.LENGTH_SHORT).show();
+        if (album.addPhoto(photo)) {
+            adapter.setPhotos(album.getPhotos());
+            updateEmptyView();
+            DataManager.saveAlbums(this, allAlbums);
+            Toast.makeText(this, "Photo added", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Photo already in album", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showPhotoOptionsDialog(Photo photo, int position) {

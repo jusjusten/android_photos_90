@@ -119,6 +119,14 @@ public class AlbumActivity extends AppCompatActivity implements PhotoAdapter.OnP
         // Get filename from URI
         String fileName = getFileNameFromUri(uri);
 
+        // Take persistable URI permission
+        try {
+            getContentResolver().takePersistableUriPermission(uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } catch (SecurityException e) {
+            // If we can't get persistable permission, the URI might still work
+        }
+
         // Create photo object
         Photo photo = new Photo(uri, fileName);
 

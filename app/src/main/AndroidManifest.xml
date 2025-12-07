@@ -28,6 +28,10 @@
             android:name=".PhotoDetailActivity"
             android:exported="false"
             android:parentActivityName=".AlbumDetailActivity"/>
+        <activity
+            android:name=".SearchActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

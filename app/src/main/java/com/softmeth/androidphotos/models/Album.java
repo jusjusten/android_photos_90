@@ -32,7 +32,14 @@ public class Album implements Serializable {
     }
     
     public List<Photo> getPhotos() {
-        return new ArrayList<>(photos);
+        return photos;  // Return actual list, not a copy
+    }
+    
+    public Photo getPhoto(int index) {
+        if (index >= 0 && index < photos.size()) {
+            return photos.get(index);
+        }
+        return null;
     }
     
     public int getPhotoCount() {
