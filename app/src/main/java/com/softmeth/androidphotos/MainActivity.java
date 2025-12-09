@@ -35,6 +35,12 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        com.google.android.material.appbar.MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        recyclerView = findViewById(R.id.albums_recycler_view);
+        emptyView = findViewById(R.id.empty_view);
+
         // Initialize views
         recyclerView = findViewById(R.id.albums_recycler_view);
         emptyView = findViewById(R.id.empty_view);
@@ -224,4 +230,6 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
     public void onAlbumLongClick(Album album, int position) {
         showAlbumOptionsDialog(album, position);
     }
+
+
 }

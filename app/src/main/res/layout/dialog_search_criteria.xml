@@ -46,12 +46,13 @@
         android:textSize="14sp"
         android:layout_marginBottom="8dp"/>
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/et_tag_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter tag value"
         android:inputType="text"
+        android:completionThreshold="1"
         android:layout_marginBottom="16dp"/>
 
     <!-- Logic Operator (shown only if criteria already exist) -->

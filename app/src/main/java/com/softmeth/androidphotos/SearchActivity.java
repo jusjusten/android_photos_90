@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -85,21 +86,21 @@ public class SearchActivity extends AppCompatActivity implements PhotoAdapter.On
         }
         return super.onOptionsItemSelected(item);
     }
-    
+
     private void showAddCriteriaDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Search Criteria");
-        
+
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_search_criteria, null);
-        
+
         RadioGroup tagTypeGroup = dialogView.findViewById(R.id.tag_type_group);
         RadioButton rbPerson = dialogView.findViewById(R.id.rb_person);
         RadioButton rbLocation = dialogView.findViewById(R.id.rb_location);
-        EditText etTagValue = dialogView.findViewById(R.id.et_tag_value);
+        AutoCompleteTextView etTagValue = dialogView.findViewById(R.id.et_tag_value);
         RadioGroup logicGroup = dialogView.findViewById(R.id.logic_group);
         RadioButton rbAnd = dialogView.findViewById(R.id.rb_and);
         RadioButton rbOr = dialogView.findViewById(R.id.rb_or);
-        
+
         // Set default selections
         rbPerson.setChecked(true);
         if (searchCriteria.isEmpty()) {
@@ -108,28 +109,37 @@ public class SearchActivity extends AppCompatActivity implements PhotoAdapter.On
             rbAnd.setChecked(useConjunction);
             rbOr.setChecked(!useConjunction);
         }
-        
+
+        // Set up auto-complete
+        updateAutoComplete(etTagValue, "person");
+
+        // Update auto-complete when tag type changes
+        tagTypeGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            String tagType = rbPerson.isChecked() ? "person" : "location";
+            updateAutoComplete(etTagValue, tagType);
+        });
+
         builder.setView(dialogView);
-        
+
         builder.setPositiveButton("Add", (dialog, which) -> {
             String tagType = rbPerson.isChecked() ? "person" : "location";
             String tagValue = etTagValue.getText().toString().trim();
-            
+
             if (tagValue.isEmpty()) {
                 Toast.makeText(this, "Tag value cannot be empty", Toast.LENGTH_SHORT).show();
                 return;
             }
-            
+
             // Update logic operator if not first criteria
             if (!searchCriteria.isEmpty()) {
                 useConjunction = rbAnd.isChecked();
             }
-            
+
             searchCriteria.add(new SearchCriteria(tagType, tagValue));
             updateCriteriaDisplay();
             Toast.makeText(this, "Criteria added", Toast.LENGTH_SHORT).show();
         });
-        
+
         builder.setNegativeButton("Cancel", null);
         builder.show();
     }
@@ -290,5 +300,31 @@ public class SearchActivity extends AppCompatActivity implements PhotoAdapter.On
             this.tagType = tagType;
             this.tagValue = tagValue;
         }
+    }
+
+    private void updateAutoComplete(AutoCompleteTextView textView, String tagType) {
+        Set<String> tagValues = getAllTagValues(tagType);
+        android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                new ArrayList<>(tagValues)
+        );
+        textView.setAdapter(adapter);
+    }
+
+    private Set<String> getAllTagValues(String tagType) {
+        Set<String> values = new HashSet<>();
+
+        for (Album album : allAlbums) {
+            for (Photo photo : album.getPhotos()) {
+                for (Tag tag : photo.getTags()) {
+                    if (tag.getName().equalsIgnoreCase(tagType)) {
+                        values.add(tag.getValue());
+                    }
+                }
+            }
+        }
+
+        return values;
     }
 }
